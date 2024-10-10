@@ -1,5 +1,5 @@
 import { Component } from './component';
-import { IEvents } from './events';
+import { EventEmitter } from './events';
 import { ensureElement } from '../../utils/utils';
 
 export interface IModal {
@@ -12,7 +12,7 @@ export class Modal extends Component<IModal> implements IModal {
 	protected content: HTMLElement | undefined;
 	protected buttonClose: HTMLButtonElement;
 
-	constructor(container: HTMLElement, protected events: IEvents) {
+	constructor(container: HTMLElement, protected events: EventEmitter) {
 		super(container);
 
 		this.currentModal = ensureElement('.modal__container', this.container);
@@ -31,6 +31,7 @@ export class Modal extends Component<IModal> implements IModal {
 	open(content: HTMLElement): void {
 		this.container.classList.add('modal_active');
 		this.content.append(content);
+		this.events.emit('modal:open');
 	}
 
 	close(): void {

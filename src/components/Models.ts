@@ -1,9 +1,9 @@
 import { ICard, ICardsData, IBasketData, basketCard } from "../types";
-import { IEvents } from "./base/events";
+import { EventEmitter } from "./base/events";
 
 export class CardsData implements ICardsData {
   protected cards: ICard[];
-  constructor(protected events: IEvents) {};
+  constructor(protected events: EventEmitter) {};
 
   setCards(cards: ICard[]): void {
     this.cards = cards;
@@ -24,7 +24,7 @@ export class BasketData implements IBasketData {
   protected goods: number;
   protected total: number;
 
-  constructor(protected events: IEvents) {};
+  constructor(protected events: EventEmitter) {};
 
   setTotal(): void {
     this.total = this.cards.reduce((accumalator, currentValue) => accumalator + currentValue.price, 0);
