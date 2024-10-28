@@ -1,5 +1,3 @@
-import { IEvents } from "../components/base/events";
-
 export interface ICard {
   id: string;
   description: string;

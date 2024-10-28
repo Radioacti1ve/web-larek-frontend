@@ -3,6 +3,10 @@ import { BasketData, CardsData} from './components/Models'
 import { EventEmitter } from './components/base/events';
 import {CardView} from './components/CardsView';
 import {Modal} from './components/base/Modal'
+import { BasketHeaderView } from './components/BasketView'
+import { OrderForm, Form } from './components/Form'
+import { cloneTemplate } from './utils/utils';
+
 
 const events = new EventEmitter();
 events.onAll((events) => {
@@ -13,9 +17,14 @@ const page = document.querySelector('.gallery');
 const template = document.querySelector('#card-catalog') as HTMLTemplateElement;
 const cardTemplate = template.content.cloneNode(true) as HTMLButtonElement;
 const modal = document.querySelector('#modal-container') as HTMLElement;
+const mainBasket = document.querySelector('.header__basket') as HTMLButtonElement;
+const form = cloneTemplate('#contacts') as HTMLTemplateElement;
 
-const newModal = new Modal(modal, events);
+const waysBuy = new Form(form, events);
+// waysBuy.checkValidity();
 
+// const newModal = new Modal(modal, events);
+// newModal.open(waysBuy.render());
 
 const myCard = new CardView(cardTemplate, events);
 
@@ -60,11 +69,10 @@ const basket = new BasketData(events);
 carddata.setCards(cards);
 basket.addItem(cards[0]);
 basket.addItem(cards[3]);
-myCard.data = cards[1];
 console.log(myCard.render());
 
 
 // console.log('my cards:  ', carddata.getCards());
 // console.log('basket:  ', basket.getTotal()); 
 
-// page.append(myCard.render());
+page.append(myCard.render());

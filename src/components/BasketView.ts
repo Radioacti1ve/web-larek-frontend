@@ -36,13 +36,11 @@ export interface IBasketHeaderView {
 }
 
 export class BasketHeaderView extends Component<IBasketHeaderView> {
-  protected _basket: HTMLButtonElement;
   protected _goods: HTMLSpanElement;
 
-  constructor(container: HTMLButtonElement, protected events: EventEmitter) {
-    super(container);
+  constructor(protected _basket: HTMLButtonElement, protected events: EventEmitter) {
+    super(_basket);
 
-    this._basket = ensureElement('.header__basket', this.container) as HTMLButtonElement;
     this._goods = ensureElement('.header__basket-counter', this.container);
 
     this._basket.addEventListener('click', () => this.events.emit('basket:open'))

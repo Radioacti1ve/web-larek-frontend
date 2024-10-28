@@ -4,20 +4,9 @@ import {ensureElement} from '../utils/utils'
 import { EventEmitter } from "./base/events";
 
 abstract class Card extends Component<ICard> {
-  protected _image: HTMLImageElement;
-  protected _category: HTMLSpanElement;
   protected _title: HTMLHeadingElement;
   protected _price: HTMLSpanElement;
-  protected _description: HTMLParagraphElement;
   protected _id: string;
-
-  set image(value: string) {
-    this.setImage(this._image, value, this._title.textContent);
-  }
-
-  set category(value: string) {
-    this.setText(this._category, value);
-  }
 
   set title(value: string) {
     this.setText(this._title, value);
@@ -30,14 +19,12 @@ abstract class Card extends Component<ICard> {
   set id(value: string) {
     this._id = value;
   }
-
-  set description(value: string) {
-    this.setText(this._description, value);
-  }
 }
 
 export class CardView extends Card {
   protected card: HTMLButtonElement;
+  protected _category: HTMLSpanElement;
+  protected _image: HTMLImageElement;
 
   constructor(container: HTMLButtonElement, protected events: EventEmitter) {
     super(container);
@@ -51,12 +38,12 @@ export class CardView extends Card {
     this.card.addEventListener('click', () => this.events.emit('card:open', {id: this._id})) 
   }
 
-  set data(card: ICard) {
-    this.id = card.id;
-    this.image = card.image;
-    this.price = card.price;
-    this.title = card.title;
-    this.category = card.category;
+  set image(value: string) {
+    this.setImage(this._image, value, 'Изображение товара: ' + this._title.textContent);
+  }
+
+  set category(value: string) {
+    this.setText(this._category, value);
   }
 }
 
@@ -75,18 +62,15 @@ export class CardCompactView extends Card {
     this.deleteButton.addEventListener('click', () => this.events.emit('basket:deleteCard', {id: this._id}));
   }
 
-  set data(card: ICard) {
-    this.id = card.id;
-    this.price = card.price;
-    this.title = card.title;
-  }
-
   set index(value: number) {
     this.setText(this._index, value);
   }
 }
 
 export class CardFullView extends Card {
+  protected _image: HTMLImageElement;
+  protected _description: HTMLParagraphElement;
+  protected _category: HTMLSpanElement;
   protected addButton: HTMLButtonElement;
 
   constructor(container: HTMLButtonElement, protected events: EventEmitter) {
@@ -102,12 +86,15 @@ export class CardFullView extends Card {
     this.addButton.addEventListener('click', () => this.events.emit('basket:addCard', {id: this._id}))
   }
 
-  set data(card: ICard) {
-    this.id = card.id;
-    this.image = card.image;
-    this.price = card.price;
-    this.title = card.title;
-    this.category = card.category;
-    this.description = card.description;
+  set image(value: string) {
+    this.setImage(this._image, value, 'Изображение товара: ' + this._title.textContent);
+  }
+
+  set description(value: string) {
+    this.setText(this._description, value);
+  }
+
+  set category(value: string) {
+    this.setText(this._category, value);
   }
 }
