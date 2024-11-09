@@ -13,7 +13,11 @@ abstract class Card extends Component<ICard> {
   }
   
   set price(value: number) {
-    this.setText(this._price, value.toString());
+    if(value === null) {
+      this.setText(this._price, 'Бесценно');
+    } else {
+      this.setText(this._price, value + ' синапсов');
+    }
   }
 
   set id(value: string) {
@@ -21,29 +25,38 @@ abstract class Card extends Component<ICard> {
   }
 }
 
-export class CardView extends Card {
-  protected card: HTMLButtonElement;
+abstract class CardFull extends Card {
   protected _category: HTMLSpanElement;
   protected _image: HTMLImageElement;
+  protected CDN_URL: string;
 
-  constructor(container: HTMLButtonElement, protected events: EventEmitter) {
-    super(container);
-
-    this.card = ensureElement('.card', this.container) as HTMLButtonElement;
-    this._image = ensureElement('.card__image', this.container) as HTMLImageElement;
-    this._category = ensureElement('.card__category', this.container) as HTMLSpanElement;
-    this._title = ensureElement('.card__title', this.container) as HTMLHeadingElement;
-    this._price = ensureElement('.card__price', this.container) as HTMLSpanElement;
-
-    this.card.addEventListener('click', () => this.events.emit('card:open', {id: this._id})) 
+  set category(value: string) {
+    this._category.classList.remove('card__category_soft');
+    this.setText(this._category, value);
+    switch(value) {
+      case 'софт-скил':
+        this._category.classList.add('card__category_soft');
+        break;
+      case 'дополнительное':
+        this._category.classList.add('card__category_additional');
+        break;
+      case 'другое':
+        this._category.classList.add('card__category_other');
+        break;
+      case 'кнопка':
+        this._category.classList.add('card__category_button');
+        break;
+      case 'хард-скилл':
+        this._category.classList.add('card__category_hard');
+        break;
+      default:
+        this._category.classList.add('card__category_soft');
+        break;
+    }
   }
 
   set image(value: string) {
-    this.setImage(this._image, value, 'Изображение товара: ' + this._title.textContent);
-  }
-
-  set category(value: string) {
-    this.setText(this._category, value);
+    this.setImage(this._image, this.CDN_URL + value, 'Изображение товара: ' + this._title.textContent);
   }
 }
 
@@ -55,11 +68,11 @@ export class CardCompactView extends Card {
     super(container);
 
     this._index = ensureElement('.basket__item-index', this.container);
-    this.deleteButton = ensureElement('.basket__item-delete', this.container) as HTMLButtonElement;
-    this._title = ensureElement('.card__title', this.container) as HTMLHeadingElement;
-    this._price = ensureElement('.card__price', this.container) as HTMLSpanElement;
+    this.deleteButton = ensureElement<HTMLButtonElement>('.basket__item-delete', this.container);
+    this._title = ensureElement<HTMLHeadingElement>('.card__title', this.container);
+    this._price = ensureElement<HTMLSpanElement>('.card__price', this.container);
 
-    this.deleteButton.addEventListener('click', () => this.events.emit('basket:deleteCard', {id: this._id}));
+    this.deleteButton.addEventListener('click', () => this.events.emit('basket:delete', {id: this._id}));
   }
 
   set index(value: number) {
@@ -67,34 +80,40 @@ export class CardCompactView extends Card {
   }
 }
 
-export class CardFullView extends Card {
-  protected _image: HTMLImageElement;
-  protected _description: HTMLParagraphElement;
-  protected _category: HTMLSpanElement;
-  protected addButton: HTMLButtonElement;
 
-  constructor(container: HTMLButtonElement, protected events: EventEmitter) {
+export class CardView extends CardFull {
+
+  constructor(container: HTMLButtonElement, protected CDN_URL: string, protected events: EventEmitter) {
     super(container);
 
-    this.addButton = ensureElement('.button', this.container) as HTMLButtonElement;
-    this._image = ensureElement('.card__image', this.container) as HTMLImageElement;
-    this._category = ensureElement('.card__category', this.container) as HTMLSpanElement;
-    this._title = ensureElement('.card__title', this.container) as HTMLHeadingElement;
-    this._price = ensureElement('.card__price', this.container) as HTMLSpanElement;
-    this._description = ensureElement('.card__text', this.container) as HTMLParagraphElement;
+    this._image = ensureElement<HTMLImageElement>('.card__image', this.container);
+    this._category = ensureElement<HTMLSpanElement>('.card__category', this.container);
+    this._title = ensureElement<HTMLHeadingElement>('.card__title', this.container);
+    this._price = ensureElement<HTMLSpanElement>('.card__price', this.container);
 
-    this.addButton.addEventListener('click', () => this.events.emit('basket:addCard', {id: this._id}))
+    this.container.addEventListener('click', () => this.events.emit('card:open', {id: this._id})) 
   }
 
-  set image(value: string) {
-    this.setImage(this._image, value, 'Изображение товара: ' + this._title.textContent);
+}
+
+
+export class CardFullView extends CardFull {
+  protected _description: HTMLParagraphElement;
+  protected addButton: HTMLButtonElement;
+
+  constructor(container: HTMLButtonElement, protected CDN_URL: string, protected events: EventEmitter) {
+    super(container);
+    this.addButton = ensureElement<HTMLButtonElement>('.button', this.container);
+    this._image = ensureElement<HTMLImageElement>('.card__image', this.container);
+    this._category = ensureElement<HTMLSpanElement>('.card__category', this.container);
+    this._title = ensureElement<HTMLHeadingElement>('.card__title', this.container);
+    this._price = ensureElement<HTMLSpanElement>('.card__price', this.container);
+    this._description = ensureElement<HTMLParagraphElement>('.card__text', this.container);
+
+    this.addButton.addEventListener('click', () => this.events.emit('basket:add', {id: this._id}))
   }
 
   set description(value: string) {
     this.setText(this._description, value);
-  }
-
-  set category(value: string) {
-    this.setText(this._category, value);
   }
 }

@@ -27,7 +27,7 @@ export class BasketData implements IBasketData {
   constructor(protected events: EventEmitter) {};
 
   setTotal(): void {
-    this.total = this.cards.reduce((accumalator, currentValue) => accumalator + currentValue.price, 0);
+    this.total = this.cards.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0);
   }
 
   getCards(): basketCard[] {
@@ -35,7 +35,7 @@ export class BasketData implements IBasketData {
   }
 
   getTotal(): number {
-    return this.total;
+    return this.total | 0;
   }
 
   getGoods(): number {
@@ -49,8 +49,14 @@ export class BasketData implements IBasketData {
   }
 
   deleteItem(id: string): void {
-    this.cards.filter(card => card.id === id);
+    this.cards = this.cards.filter(card => card.id !== id);
     this.setTotal();
     this.events.emit('basket:changed');
+  }
+
+  clearBasket(): void {
+    this.events.emit('basket:changed');
+    this.cards = [];
+    this.cards.length = 0;
   }
 }

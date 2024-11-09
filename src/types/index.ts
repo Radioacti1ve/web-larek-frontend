@@ -7,9 +7,9 @@ export interface ICard {
   price: number;  
 }
 
-export type mainCard = Pick<ICard, 'category' | 'title' | 'image' | 'price'>;
+export type mainCard = Pick<ICard, 'category' | 'title' | 'image' | 'price' | 'id'>;
 
-export type modalCard = Pick<ICard, 'category' | 'title' | 'image' | 'price' | 'description'>;
+export type modalCard = Pick<ICard, 'category' | 'title' | 'image' | 'price' | 'description' | 'id'>;
 
 export type basketCard = Pick<ICard, 'title' | 'price' | 'id'>;
 
@@ -19,6 +19,7 @@ export interface IBasketData {
   getGoods(): number;
   addItem(card: ICard): void;
   deleteItem(id: string): void;
+  clearBasket(): void;
 }
 
 export interface ICardsData {
@@ -36,4 +37,5 @@ export interface IModalForm {
 export interface IModalSuccess {
   _total: HTMLParagraphElement;
   button: HTMLButtonElement;
+  total: number;
 }

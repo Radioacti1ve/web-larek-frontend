@@ -7,11 +7,10 @@ html, body.page {
 	color: $baseFontColor;
 	background: $background;
 }
-
 .page__wrapper {
 	width: 100%;
 
-	&_locked {
-		position: fixed;
-	}
+}
+body:has(.page__wrapper_locked) {
+	overflow: hidden;
 }
