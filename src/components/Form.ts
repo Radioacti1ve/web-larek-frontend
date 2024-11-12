@@ -69,7 +69,6 @@ export class OrderForm extends Form {
   }
 
   override checkValidity(): boolean {
-    console.log(super.checkValidity(), !this.hasPayment())
     return super.checkValidity() && !this.hasPayment()
   }
 

@@ -31,7 +31,14 @@ abstract class CardFull extends Card {
   protected CDN_URL: string;
 
   set category(value: string) {
-    this._category.classList.remove('card__category_soft');
+    this._category.classList.remove(
+      'card__category_soft',
+      'card__category_additional',
+      'card__category_other',
+      'card__category_button',
+      'card__category_hard'
+    );
+  
     this.setText(this._category, value);
     switch(value) {
       case 'софт-скил':
@@ -46,7 +53,7 @@ abstract class CardFull extends Card {
       case 'кнопка':
         this._category.classList.add('card__category_button');
         break;
-      case 'хард-скилл':
+      case 'хард-скил':
         this._category.classList.add('card__category_hard');
         break;
       default:
@@ -115,5 +122,15 @@ export class CardFullView extends CardFull {
 
   set description(value: string) {
     this.setText(this._description, value);
+  }
+
+  override set price(value: number) {
+    if(value === null) {
+      this.addButton.disabled = true;
+      this.setText(this._price, 'Бесценно');
+    } else {
+      this.addButton.disabled = false;
+      this.setText(this._price, value + ' синапсов');
+    }
   }
 }

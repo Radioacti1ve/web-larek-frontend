@@ -21,6 +21,7 @@ export class CardsData implements ICardsData {
 
 export class BasketData implements IBasketData {
   protected cards: basketCard[] = [];
+  protected ids: string[] = [];
   protected goods: number;
   protected total: number;
 
@@ -42,6 +43,14 @@ export class BasketData implements IBasketData {
     return this.cards.length;
   }
 
+  getCardsId() {
+    this.cards.forEach(card => {
+      this.ids.push(card.id);
+    })
+
+    return this.ids;
+  }
+
   addItem(card: ICard): void {
     this.cards.push(card);
     this.setTotal();
@@ -55,8 +64,8 @@ export class BasketData implements IBasketData {
   }
 
   clearBasket(): void {
-    this.events.emit('basket:changed');
     this.cards = [];
     this.cards.length = 0;
+    this.events.emit('basket:changed');
   }
 }

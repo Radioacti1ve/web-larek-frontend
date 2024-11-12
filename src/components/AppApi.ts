@@ -1,4 +1,5 @@
 import { ICard } from "../types";
+import { ContactData } from './ContactData'
 import { Api } from "./base/api";
 
 interface IAppApi {
@@ -24,5 +25,9 @@ export class AppApi extends Api implements IAppApi  {
 
   getCard(value: string): Promise<ICard | object> {
     return this.get(`/product/${value}`);
+  }
+
+  sendOrder(obj: ContactData) {
+    return this.post(`/order`, obj, 'POST');
   }
 }
