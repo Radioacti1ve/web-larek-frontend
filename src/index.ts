@@ -3,7 +3,7 @@ import './scss/styles.scss';
 import { EventEmitter } from './components/base/events';
 import { Modal } from './components/base/Modal'
 import { API_URL, CDN_URL } from "./utils/constants";
-import { cloneTemplate, ensureElement, ensureAllElements } from './utils/utils';
+import { cloneTemplate, ensureElement } from './utils/utils';
 import { BasketData, CardsData} from './components/Models'
 import { CardView, CardFullView, CardCompactView } from './components/CardsView';
 import { BasketView } from './components/BasketView'
